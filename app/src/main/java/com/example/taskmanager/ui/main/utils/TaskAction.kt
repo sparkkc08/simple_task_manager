@@ -1,7 +1,7 @@
 package com.example.taskmanager.ui.main.utils
 
-import com.example.taskmanager.ui.main.model.Task
+import com.example.taskmanager.ui.main.data.Task
 
 interface TaskAction {
-    fun onChecked(task: Task, isChecked: Boolean)
+    fun onTaskUpdate(task: Task)
 }

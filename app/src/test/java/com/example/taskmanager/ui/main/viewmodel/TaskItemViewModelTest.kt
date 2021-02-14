@@ -2,7 +2,7 @@ package com.example.taskmanager.ui.main.viewmodel
 
 import com.example.taskmanager.R
 import com.example.taskmanager.ui.main.utils.TaskAction
-import com.example.taskmanager.ui.main.model.Task
+import com.example.taskmanager.ui.main.data.Task
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -76,10 +76,10 @@ class TaskItemViewModelTest {
     @Test
     fun onItemCheckedTest() {
         viewModel.onItemChecked(true)
-        verify { actionListener.onChecked(task, true) }
+        verify { actionListener.onTaskUpdate(task.copy(completed = true)) }
 
         viewModel.onItemChecked(false)
-        verify { actionListener.onChecked(task, false) }
+        verify { actionListener.onTaskUpdate(task.copy(completed = true)) }
     }
 
     private fun createViewModel() = TaskItemViewModel(task, actionListener)

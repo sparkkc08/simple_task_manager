@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskmanager.R
-import com.example.taskmanager.ui.main.model.Task
+import com.example.taskmanager.ui.main.data.Task
 import com.example.taskmanager.ui.main.viewmodel.TaskItemViewModel
 import com.example.taskmanager.ui.main.utils.TaskAction
 
-class TasksAdapter : ListAdapter<Task, TasksAdapter.ViewHolder>(
+class TasksAdapter(private val actionListener: TaskAction) : ListAdapter<Task, TasksAdapter.ViewHolder>(
     TaskDiffCallback
-), TaskAction {
+) {
 
     class ViewHolder(val dataBinder: ViewDataBinding) : RecyclerView.ViewHolder(dataBinder.root)
 
@@ -35,13 +35,9 @@ class TasksAdapter : ListAdapter<Task, TasksAdapter.ViewHolder>(
             BR.viewModel,
             TaskItemViewModel(
                 getItem(position),
-                this
+                actionListener
             )
         )
-    }
-
-    fun addTask(task: Task) {
-        submitList(listOf(task) + currentList)
     }
 
     object TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
@@ -51,16 +47,6 @@ class TasksAdapter : ListAdapter<Task, TasksAdapter.ViewHolder>(
 
         override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
             return oldItem == newItem
-        }
-    }
-
-    override fun onChecked(task: Task, isChecked: Boolean) {
-        val (newList, taskIndex) = currentList.toMutableList().run {
-            this to indexOf(task)
-        }
-        if (taskIndex >= 0 && task.completed != isChecked) {
-            newList[taskIndex] = task.copy(completed = isChecked)
-            submitList(newList)
         }
     }
 }

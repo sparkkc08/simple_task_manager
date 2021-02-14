@@ -8,7 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskmanager.databinding.MainFragmentBinding
+import com.example.taskmanager.ui.main.data.AppDatabase
+import com.example.taskmanager.ui.main.data.TasksRepositoryImpl
+import com.example.taskmanager.ui.main.network.RestApiService
 import com.example.taskmanager.ui.main.viewmodel.MainViewModel
+import com.example.taskmanager.ui.main.viewmodel.MainViewModelFactory
 
 
 class MainFragment : Fragment() {
@@ -30,7 +34,12 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        val api = RestApiService.createService()
+        val database = AppDatabase.getInstance(requireContext().applicationContext)
+        viewModel =
+            ViewModelProvider(this, MainViewModelFactory(TasksRepositoryImpl(api, database))).get(
+                MainViewModel::class.java
+            )
         viewModel.adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 binding.recyclerView.smoothScrollToPosition(positionStart)

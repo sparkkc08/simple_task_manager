@@ -1,6 +1,6 @@
 package com.example.taskmanager.ui.main.network
 
-import com.example.taskmanager.ui.main.model.Task
+import com.example.taskmanager.ui.main.data.Task
 import com.example.taskmanager.ui.main.utils.Constants
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
